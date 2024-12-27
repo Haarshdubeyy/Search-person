@@ -30,7 +30,8 @@ interface GenericDialogProps<T extends FieldValues> {
   editDialogTitle?: string;
   dialogDescription?: string;
   submitButtonLabel?: string;
-  defaultValues?: DefaultValues<T>; // If present, this will indicate edit mode
+  defaultValues?: DefaultValues<T>;
+  children?: React.ReactNode; // If present, this will indicate edit mode
 }
 
 export default function MutableDialog<T extends FieldValues>({

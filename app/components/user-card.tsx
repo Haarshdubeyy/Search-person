@@ -1,4 +1,3 @@
-
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -25,7 +24,6 @@ interface UserCardProps {
 }
 
 export function UserCard({ user, onUpdate, onDelete }: UserCardProps) {
-  //const [isEditing, setIsEditing] = useState(false)
   const { toast } = useToast()
 
   const handleUpdateUser = async (data: UserFormData): Promise<ActionState<User>> => {
@@ -34,7 +32,6 @@ export function UserCard({ user, onUpdate, onDelete }: UserCardProps) {
       if (!updatedUser) throw new Error('User not found')
 
       onUpdate?.(updatedUser)
-      //setIsEditing(false)
 
       toast({
         title: 'User Updated',
@@ -122,17 +119,16 @@ export function UserCard({ user, onUpdate, onDelete }: UserCardProps) {
           dialogDescription="Update the user details below."
           submitButtonLabel="Save Changes"
           defaultValues={user}
-          triggerButton={
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex items-center gap-2"
-            >
-              <Edit className="w-4 h-4" />
-              Edit
-            </Button>
-          }
-        />
+        >
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex items-center gap-2"
+          >
+            <Edit className="w-4 h-4" />
+            Edit
+          </Button>
+        </MutableDialog>
         <Button
           variant="destructive"
           size="sm"
