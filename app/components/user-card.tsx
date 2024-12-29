@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react'
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -23,13 +26,18 @@ interface UserCardProps {
   onDelete?: (id: string) => void
 }
 
-export function UserCard({ user, onUpdate, onDelete }: UserCardProps) {
+export function UserCard({ user: initialUser, onUpdate, onDelete }: UserCardProps) {
+  const [user, setUser] = useState(initialUser)
   const { toast } = useToast()
 
   const handleUpdateUser = async (data: UserFormData): Promise<ActionState<User>> => {
     try {
       const updatedUser = await updateUser(user.id, data)
       if (!updatedUser) throw new Error('User not found')
+
+
+      setUser(updatedUser)
+
 
       onUpdate?.(updatedUser)
 
@@ -85,11 +93,13 @@ export function UserCard({ user, onUpdate, onDelete }: UserCardProps) {
       <CardHeader className="flex flex-row items-center gap-4">
         <Avatar className="w-16 h-16">
           <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${user.name}`} alt={user.name} />
-          <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+          <AvatarFallback>{user.name.split(' ').map((n) => n[0]).join('')}</AvatarFallback>
         </Avatar>
         <div className="flex flex-col">
           <CardTitle className="text-2xl">{user.name}</CardTitle>
-          <Badge variant="secondary" className="w-fit mt-1">ID: {user.id}</Badge>
+          <Badge variant="secondary" className="w-fit mt-1">
+            ID: {user.id}
+          </Badge>
         </div>
       </CardHeader>
       <CardContent className="grid gap-4">
@@ -120,21 +130,12 @@ export function UserCard({ user, onUpdate, onDelete }: UserCardProps) {
           submitButtonLabel="Save Changes"
           defaultValues={user}
         >
-          <Button
-            variant="outline"
-            size="sm"
-            className="flex items-center gap-2"
-          >
+          <Button variant="outline" size="sm" className="flex items-center gap-2">
             <Edit className="w-4 h-4" />
             Edit
           </Button>
         </MutableDialog>
-        <Button
-          variant="destructive"
-          size="sm"
-          className="flex items-center gap-2"
-          onClick={handleDeleteUser}
-        >
+        <Button variant="destructive" size="sm" className="flex items-center gap-2" onClick={handleDeleteUser}>
           <Trash2 className="w-4 h-4" />
           Delete
         </Button>
