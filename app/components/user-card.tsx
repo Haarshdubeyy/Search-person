@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -28,17 +28,21 @@ interface UserCardProps {
 
 export function UserCard({ user: initialUser, onUpdate, onDelete }: UserCardProps) {
   const [user, setUser] = useState(initialUser)
+  const [isDeleted, setIsDeleted] = useState(false) // State to track deletion
   const { toast } = useToast()
+
+  useEffect(() => {
+    if (isDeleted) {
+      window.location.reload()
+    }
+  }, [isDeleted]) 
 
   const handleUpdateUser = async (data: UserFormData): Promise<ActionState<User>> => {
     try {
       const updatedUser = await updateUser(user.id, data)
       if (!updatedUser) throw new Error('User not found')
 
-
       setUser(updatedUser)
-
-
       onUpdate?.(updatedUser)
 
       toast({
@@ -69,8 +73,9 @@ export function UserCard({ user: initialUser, onUpdate, onDelete }: UserCardProp
     try {
       const success = await deleteUser(user.id)
       if (success) {
+        setTimeout(()=>setIsDeleted(true),1000)
         onDelete?.(user.id)
-
+        console.log("User deleted successfully")
         toast({
           title: 'User Deleted',
           description: `User ${user.name} was deleted successfully.`,
@@ -87,6 +92,8 @@ export function UserCard({ user: initialUser, onUpdate, onDelete }: UserCardProp
       })
     }
   }
+
+  if (isDeleted) return null 
 
   return (
     <Card className="w-full max-w-md mx-auto">
@@ -143,4 +150,3 @@ export function UserCard({ user: initialUser, onUpdate, onDelete }: UserCardProp
     </Card>
   )
 }
-
