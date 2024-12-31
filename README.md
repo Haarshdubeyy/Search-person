@@ -120,4 +120,6 @@ This project is open source and available under the [MIT License](LICENSE).
 
 Callum Bir - [@callumbir](https://twitter.com/callumbir) 
 
+Last contribution of 2024 
+
 Project Link: [https://github.com/gocallum/person-search](https://github.com/gocallum/person-search)
